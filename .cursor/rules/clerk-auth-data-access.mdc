@@ -1,8 +1,6 @@
 ---
 alwaysApply: true
-description: Clerk authentication and data access control rules
 ---
-
 # Clerk Authentication & Data Access Control
 
 This project uses **Clerk** for all authentication. Users can ONLY access their own data and must NEVER be able to access data belonging to other users.

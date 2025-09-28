@@ -5,7 +5,15 @@ description: shadcn/ui component library usage guidelines
 
 # shadcn/ui Component Library Guidelines
 
-This project uses **shadcn/ui** for all UI elements. shadcn/ui provides a collection of reusable components built using Radix UI and Tailwind CSS.
+This project uses **ONLY shadcn/ui** for all UI elements. **ABSOLUTELY NO custom UI components should be created in this project.** shadcn/ui provides a collection of reusable components built using Radix UI and Tailwind CSS.
+
+## CRITICAL RULES - NO EXCEPTIONS
+
+1. **ONLY shadcn/ui components** - Never create custom UI components
+2. **NO custom styling** - Use only shadcn/ui components and their variants
+3. **NO custom CSS** - All styling must come from shadcn/ui and Tailwind classes
+4. **Clerk authentication** - Must use shadcn/ui buttons with modals for sign in/sign up
+5. **NO exceptions** - Every UI element must be a shadcn/ui component
 
 ## Setup Commands
 
@@ -28,11 +36,58 @@ npx shadcn@latest add [component-name]
 
 ## Usage Guidelines
 
-1. **Always use shadcn/ui components** for UI elements instead of creating custom components from scratch
+1. **ONLY use shadcn/ui components** - Never create custom components
 2. **Check available components** at https://ui.shadcn.com/docs/components before implementing UI
 3. **Import components** from `@/components/ui/[component-name]` after installation
 4. **Customize components** by modifying the component files in the `components/ui/` directory
 5. **Follow shadcn/ui patterns** for styling and theming
+6. **NO custom CSS files** - All styling through shadcn/ui and Tailwind
+
+## Clerk Authentication Requirements
+
+**MANDATORY**: All Clerk authentication must use shadcn/ui components:
+
+### Sign In/Sign Up Buttons
+```typescript
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { SignIn, SignUp } from "@clerk/nextjs";
+
+// ✅ CORRECT: Use shadcn/ui Button with Dialog
+<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="default">Sign In</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <SignIn />
+  </DialogContent>
+</Dialog>
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="outline">Sign Up</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <SignUp />
+  </DialogContent>
+</Dialog>
+```
+
+### User Button
+```typescript
+import { Button } from "@/components/ui/button";
+import { UserButton } from "@clerk/nextjs";
+
+// ✅ CORRECT: Use shadcn/ui Button for UserButton
+<UserButton 
+  appearance={{
+    elements: {
+      avatarBox: "w-8 h-8",
+      userButtonPopoverCard: "bg-background border",
+    }
+  }}
+/>
+```
 
 ## Common Components to Consider
 
@@ -50,4 +105,26 @@ After initialization, shadcn/ui will create:
 - `components.json` - Configuration file
 - `lib/utils.ts` - Utility functions (including `cn` for class merging)
 
-Always prefer shadcn/ui components over custom implementations to maintain consistency and leverage the robust, accessible component library.
+## FORBIDDEN PRACTICES
+
+❌ **NEVER do these:**
+- Create custom UI components
+- Write custom CSS for UI elements
+- Use HTML elements directly without shadcn/ui wrappers
+- Create custom buttons, inputs, or form elements
+- Use Clerk's default styling without shadcn/ui integration
+- Create custom modals, dialogs, or overlays
+- Write custom styling for layout components
+
+## Required Components for Clerk Integration
+
+Install these shadcn/ui components for Clerk integration:
+```bash
+npx shadcn@latest add button
+npx shadcn@latest add dialog
+npx shadcn@latest add card
+npx shadcn@latest add input
+npx shadcn@latest add form
+```
+
+**Remember: This project uses ONLY shadcn/ui components. NO custom UI is allowed.**

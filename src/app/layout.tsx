@@ -19,7 +19,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "FlashyCardy Course",
+  title: "Flashy Cardy Course",
   description: "A flashcard learning application with Clerk authentication",
 };
 
@@ -36,7 +36,7 @@ export default function RootLayout({
         >
           <header className="border-b border-gray-200 dark:border-gray-800 p-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
-              <h1 className="text-xl font-semibold">FlashyCardy Course</h1>
+              <h1 className="text-xl font-semibold">Flashy Cardy Course</h1>
               <div className="flex items-center gap-4">
                 <SignedOut>
                   <SignInButton mode="modal">
