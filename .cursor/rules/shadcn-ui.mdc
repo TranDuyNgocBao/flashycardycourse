@@ -1,0 +1,53 @@
+---
+alwaysApply: true
+description: shadcn/ui component library usage guidelines
+---
+
+# shadcn/ui Component Library Guidelines
+
+This project uses **shadcn/ui** for all UI elements. shadcn/ui provides a collection of reusable components built using Radix UI and Tailwind CSS.
+
+## Setup Commands
+
+### Initialize shadcn/ui (if not already initialized):
+```bash
+npx shadcn@latest init
+```
+
+### Install specific components:
+```bash
+npx shadcn@latest add [component-name]
+```
+
+**Examples:**
+- `npx shadcn@latest add button` - Install button component
+- `npx shadcn@latest add input` - Install input component  
+- `npx shadcn@latest add card` - Install card component
+- `npx shadcn@latest add dialog` - Install dialog component
+- `npx shadcn@latest add form` - Install form component
+
+## Usage Guidelines
+
+1. **Always use shadcn/ui components** for UI elements instead of creating custom components from scratch
+2. **Check available components** at https://ui.shadcn.com/docs/components before implementing UI
+3. **Import components** from `@/components/ui/[component-name]` after installation
+4. **Customize components** by modifying the component files in the `components/ui/` directory
+5. **Follow shadcn/ui patterns** for styling and theming
+
+## Common Components to Consider
+
+- **Layout**: `card`, `separator`, `container`
+- **Forms**: `button`, `input`, `textarea`, `select`, `checkbox`, `radio-group`, `form`
+- **Feedback**: `alert`, `toast`, `progress`, `skeleton`
+- **Navigation**: `tabs`, `breadcrumb`, `pagination`
+- **Overlays**: `dialog`, `sheet`, `popover`, `tooltip`, `dropdown-menu`
+- **Data Display**: `table`, `badge`, `avatar`, `calendar`
+
+## Project Structure
+
+After initialization, shadcn/ui will create:
+- `components/ui/` - Contains all installed components
+- `components.json` - Configuration file
+- `lib/utils.ts` - Utility functions (including `cn` for class merging)
+
+Always prefer shadcn/ui components over custom implementations to maintain consistency and leverage the robust, accessible component library.

@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+description: Safety guidelines for content removal and command execution
+---
+
+# Safety Guidelines
+
+## Content Removal Policy
+- **ALWAYS ask for confirmation before removing any content** from files, directories, or the project
+- This includes but is not limited to:
+  - Deleting files or directories
+  - Removing code blocks, functions, or components
+  - Clearing file contents
+  - Removing dependencies or imports
+  - Uninstalling packages or libraries
+
+## Command Execution Policy
+- **ALWAYS ask for permission before running any commands** that could affect the system or project
+- This includes but is not limited to:
+  - Package installation/removal commands (npm, yarn, pip, etc.)
+  - Database operations
+  - Build or deployment commands
+  - File system operations
+  - Environment setup commands
+  - Git operations that modify the repository
+
+## Exception Cases
+- Reading files and directories for analysis is always allowed
+- Searching through code is always allowed
+- Providing code suggestions and explanations is always allowed
+
+## Communication
+When asking for permission, clearly explain:
+1. What action you want to take
+2. Why it's necessary
+3. What the potential impact might be
+4. Any alternatives if available

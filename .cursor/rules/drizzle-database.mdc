@@ -1,0 +1,180 @@
+---
+alwaysApply: true
+description: Database interactions must use Drizzle ORM schema and queries
+---
+
+# Drizzle Database Interaction Rules
+
+All database interactions in this project **MUST** use Drizzle ORM with the defined schema and queries. Never use raw SQL or other ORMs.
+
+## Required Imports
+
+Always import the database connection and schema from:
+```typescript
+import { db } from '@/db';
+import { decksTable, cardsTable } from '@/db/schema';
+```
+
+## Database Schema Reference
+
+### Tables Available
+
+**Decks Table** - [src/db/schema.ts](mdc:src/db/schema.ts)
+- `id`: integer (auto-generated primary key)
+- `userId`: varchar(255) - Clerk user ID
+- `title`: varchar(255) - Deck title
+- `description`: text - Optional description
+- `createdAt`: timestamp (auto-generated)
+- `updatedAt`: timestamp (auto-generated)
+
+**Cards Table** - [src/db/schema.ts](mdc:src/db/schema.ts)
+- `id`: integer (auto-generated primary key)
+- `deckId`: integer (foreign key to decks.id, cascade delete)
+- `front`: text - Question/prompt side
+- `back`: text - Answer side
+- `createdAt`: timestamp (auto-generated)
+- `updatedAt`: timestamp (auto-generated)
+- `difficulty`: integer (1-5 scale, default 1)
+- `lastReviewed`: timestamp (optional)
+- `nextReview`: timestamp (optional)
+- `reviewCount`: integer (default 0)
+
+## Query Patterns
+
+### Insert Operations
+```typescript
+// Insert a new deck
+const [newDeck] = await db.insert(decksTable).values({
+  userId: 'user_123',
+  title: 'My Deck',
+  description: 'Optional description'
+}).returning();
+
+// Insert a new card
+const [newCard] = await db.insert(cardsTable).values({
+  deckId: 1,
+  front: 'What is React?',
+  back: 'A JavaScript library for building user interfaces'
+}).returning();
+```
+
+### Select Operations
+```typescript
+// Get all decks for a user
+const userDecks = await db.select().from(decksTable)
+  .where(eq(decksTable.userId, 'user_123'));
+
+// Get cards for a deck
+const deckCards = await db.select().from(cardsTable)
+  .where(eq(cardsTable.deckId, deckId));
+
+// Join queries
+const decksWithCardCount = await db.select({
+  id: decksTable.id,
+  title: decksTable.title,
+  cardCount: sql<number>`count(${cardsTable.id})`
+}).from(decksTable)
+.leftJoin(cardsTable, eq(decksTable.id, cardsTable.deckId))
+.groupBy(decksTable.id);
+```
+
+### Update Operations
+```typescript
+// Update deck
+await db.update(decksTable)
+  .set({ 
+    title: 'Updated Title',
+    updatedAt: new Date()
+  })
+  .where(eq(decksTable.id, deckId));
+
+// Update card review data
+await db.update(cardsTable)
+  .set({
+    difficulty: 3,
+    lastReviewed: new Date(),
+    nextReview: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    reviewCount: sql`${cardsTable.reviewCount} + 1`
+  })
+  .where(eq(cardsTable.id, cardId));
+```
+
+### Delete Operations
+```typescript
+// Delete a card
+await db.delete(cardsTable)
+  .where(eq(cardsTable.id, cardId));
+
+// Delete a deck (cards will be cascade deleted)
+await db.delete(decksTable)
+  .where(eq(decksTable.id, deckId));
+```
+
+## Required Imports for Queries
+```typescript
+import { eq, and, or, desc, asc, sql } from 'drizzle-orm';
+```
+
+## Error Handling
+
+Always wrap database operations in try-catch blocks:
+```typescript
+try {
+  const result = await db.select().from(decksTable);
+  return result;
+} catch (error) {
+  console.error('Database error:', error);
+  throw new Error('Failed to fetch decks');
+}
+```
+
+## Database Connection
+
+The database connection is configured in [src/db/index.ts](mdc:src/db/index.ts) using:
+- Neon serverless PostgreSQL
+- Environment variable: `DATABASE_URL`
+- Drizzle ORM with schema validation
+
+## Migration Management
+
+Database migrations are managed through Drizzle Kit:
+- Configuration: [drizzle.config.ts](mdc:drizzle.config.ts)
+- Migration files: `drizzle/` directory
+- Run migrations with: `npx drizzle-kit push`
+
+## Strict Requirements
+
+1. **NEVER use raw SQL queries** - Always use Drizzle query builder
+2. **NEVER use other ORMs** - Only Drizzle ORM is allowed
+3. **ALWAYS use the defined schema** - Reference [src/db/schema.ts](mdc:src/db/schema.ts)
+4. **ALWAYS handle errors** - Wrap database operations in try-catch
+5. **ALWAYS use proper imports** - Import from `@/db` and `@/db/schema`
+6. **ALWAYS validate data** - Use TypeScript types from schema
+7. **ALWAYS use transactions** for related operations that must succeed together
+
+## Example API Route Pattern
+
+```typescript
+import { db } from '@/db';
+import { decksTable, cardsTable } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+
+export async function GET(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get('userId');
+    
+    if (!userId) {
+      return Response.json({ error: 'User ID required' }, { status: 400 });
+    }
+    
+    const decks = await db.select().from(decksTable)
+      .where(eq(decksTable.userId, userId));
+    
+    return Response.json(decks);
+  } catch (error) {
+    console.error('Error fetching decks:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```

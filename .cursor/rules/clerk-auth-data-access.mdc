@@ -1,0 +1,200 @@
+---
+alwaysApply: true
+description: Clerk authentication and data access control rules
+---
+
+# Clerk Authentication & Data Access Control
+
+This project uses **Clerk** for all authentication. Users can ONLY access their own data and must NEVER be able to access data belonging to other users.
+
+## Authentication Setup
+
+The project is configured with Clerk authentication as seen in:
+- [src/middleware.ts](mdc:src/middleware.ts) - Clerk middleware configuration
+- [src/app/layout.tsx](mdc:src/app/layout.tsx) - ClerkProvider setup with dark theme
+- [package.json](mdc:package.json) - Clerk dependencies
+
+## Database Schema & User Isolation
+
+All database tables include `userId` fields that store Clerk user IDs:
+- [src/db/schema.ts](mdc:src/db/schema.ts) - `decksTable.userId` and `cardsTable` (via deck ownership)
+
+## CRITICAL Security Requirements
+
+### 1. User ID Validation
+**ALWAYS** validate that the authenticated user matches the data owner:
+
+```typescript
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { decksTable, cardsTable } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
+
+// ✅ CORRECT: Always check user ownership
+export async function GET(request: Request) {
+  const { userId } = await auth();
+  if (!userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  
+  const decks = await db.select()
+    .from(decksTable)
+    .where(eq(decksTable.userId, userId)); // CRITICAL: Filter by userId
+}
+
+// ❌ WRONG: Never query without user filter
+const allDecks = await db.select().from(decksTable); // SECURITY VIOLATION!
+```
+
+### 2. Data Access Patterns
+
+**For Decks:**
+```typescript
+// Get user's decks
+const userDecks = await db.select()
+  .from(decksTable)
+  .where(eq(decksTable.userId, userId));
+
+// Get specific deck (with ownership check)
+const deck = await db.select()
+  .from(decksTable)
+  .where(and(
+    eq(decksTable.id, deckId),
+    eq(decksTable.userId, userId) // CRITICAL: Verify ownership
+  ));
+```
+
+**For Cards (via deck ownership):**
+```typescript
+// Get cards for user's deck
+const cards = await db.select()
+  .from(cardsTable)
+  .innerJoin(decksTable, eq(cardsTable.deckId, decksTable.id))
+  .where(eq(decksTable.userId, userId)); // CRITICAL: Verify deck ownership
+```
+
+### 3. API Route Security
+
+**ALWAYS** follow this pattern in API routes:
+
+```typescript
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { decksTable, cardsTable } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
+
+export async function GET(request: Request) {
+  try {
+    // 1. Authenticate user
+    const { userId } = await auth();
+    if (!userId) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // 2. Extract parameters safely
+    const { searchParams } = new URL(request.url);
+    const deckId = searchParams.get('deckId');
+
+    // 3. Query with user ownership verification
+    const deck = await db.select()
+      .from(decksTable)
+      .where(and(
+        eq(decksTable.id, parseInt(deckId)),
+        eq(decksTable.userId, userId) // CRITICAL: User ownership check
+      ));
+
+    if (deck.length === 0) {
+      return Response.json({ error: "Deck not found" }, { status: 404 });
+    }
+
+    return Response.json(deck[0]);
+  } catch (error) {
+    console.error('Error:', error);
+    return Response.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+```
+
+### 4. Required Imports
+
+Always include these imports for authentication and database operations:
+
+```typescript
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { decksTable, cardsTable } from "@/db/schema";
+import { eq, and, or, desc, asc, sql } from "drizzle-orm";
+```
+
+### 5. Frontend Authentication Checks
+
+Use Clerk components for conditional rendering:
+
+```typescript
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+
+// Show content only to authenticated users
+<SignedIn>
+  {/* User-specific content */}
+</SignedIn>
+
+<SignedOut>
+  {/* Public content or login prompts */}
+</SignedOut>
+```
+
+## Security Checklist
+
+Before implementing any data access:
+
+- [ ] ✅ User is authenticated (`auth()` returns valid userId)
+- [ ] ✅ All database queries filter by `userId` or verify ownership
+- [ ] ✅ No raw SQL queries that bypass user filtering
+- [ ] ✅ API routes return 401 for unauthenticated users
+- [ ] ✅ API routes return 404 for non-existent or unauthorized data
+- [ ] ✅ Error handling doesn't leak sensitive information
+- [ ] ✅ Frontend uses Clerk components for auth state
+
+## Common Security Violations to AVOID
+
+❌ **NEVER** do these:
+```typescript
+// Querying all data without user filter
+const allDecks = await db.select().from(decksTable);
+
+// Trusting client-side data for user identification
+const userId = request.headers.get('user-id'); // WRONG!
+
+// Bypassing ownership checks
+const deck = await db.select()
+  .from(decksTable)
+  .where(eq(decksTable.id, deckId)); // Missing userId check!
+
+// Exposing other users' data
+return Response.json({ decks: allDecks }); // Could include other users' data
+```
+
+## Data Relationships & Ownership
+
+- **Decks**: Owned by `userId` (Clerk user ID)
+- **Cards**: Owned indirectly through deck ownership (cards belong to decks, decks belong to users)
+- **Cascade Deletes**: When a deck is deleted, all its cards are automatically deleted
+- **Foreign Key Integrity**: Cards reference decks, ensuring data consistency
+
+## Error Handling
+
+Always handle authentication errors gracefully:
+
+```typescript
+// Authentication error
+if (!userId) {
+  return Response.json({ error: "Authentication required" }, { status: 401 });
+}
+
+// Authorization error (user doesn't own the resource)
+if (resource.length === 0) {
+  return Response.json({ error: "Resource not found" }, { status: 404 });
+}
+```
+
+Remember: **Security is not optional**. Every database query must verify user ownership. When in doubt, add the user filter - it's better to be overly cautious than to create a security vulnerability.
