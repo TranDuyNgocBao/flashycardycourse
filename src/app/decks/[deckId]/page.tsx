@@ -30,7 +30,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
   }
 
   // Fetch deck and cards with user ownership verification
-  const [deck, cards] = await Promise.all([
+  const [deck, cardsData] = await Promise.all([
     getDeckById(deckId, userId),
     getCardsByDeckId(deckId, userId)
   ]);
@@ -38,6 +38,17 @@ export default async function DeckPage({ params }: DeckPageProps) {
   if (!deck) {
     notFound();
   }
+
+  // Transform cards data to ensure non-null values
+  const cards = cardsData.map(item => ({
+    cards: {
+      id: item.cards.id,
+      front: item.cards.front,
+      back: item.cards.back,
+      difficulty: item.cards.difficulty ?? 1, // Default to 1 if null
+      reviewCount: item.cards.reviewCount ?? 0, // Default to 0 if null
+    }
+  }));
 
   return (
     <DeckDetailClient 

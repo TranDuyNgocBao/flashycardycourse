@@ -51,6 +51,7 @@ export async function updateCard(
     lastReviewed: Date;
     nextReview: Date;
     reviewCount: number;
+    incrementReviewCount?: boolean;
   }>
 ) {
   // First verify user ownership by checking if the card belongs to a deck owned by the user
@@ -66,8 +67,16 @@ export async function updateCard(
     throw new Error('Card not found or access denied');
   }
 
+  // Prepare update data
+  const updateData: any = { ...data, updatedAt: new Date() };
+  
+  // If incrementReviewCount is true, increment the review count
+  if (data.incrementReviewCount) {
+    updateData.reviewCount = sql`${cardsTable.reviewCount} + 1`;
+  }
+
   const [updatedCard] = await db.update(cardsTable)
-    .set({ ...data, updatedAt: new Date() })
+    .set(updateData)
     .where(eq(cardsTable.id, cardId))
     .returning();
   return updatedCard;
