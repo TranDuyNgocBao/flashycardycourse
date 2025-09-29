@@ -29,12 +29,13 @@ export async function getUserDecksWithCardCount(userId: string) {
       title: decksTable.title,
       description: decksTable.description,
       createdAt: decksTable.createdAt,
+      updatedAt: decksTable.updatedAt,
       cardCount: sql<number>`count(${cardsTable.id})`,
     })
     .from(decksTable)
     .leftJoin(cardsTable, eq(decksTable.id, cardsTable.deckId))
     .where(eq(decksTable.userId, userId))
-    .groupBy(decksTable.id, decksTable.title, decksTable.description, decksTable.createdAt);
+    .groupBy(decksTable.id, decksTable.title, decksTable.description, decksTable.createdAt, decksTable.updatedAt);
 }
 
 // Create a new deck

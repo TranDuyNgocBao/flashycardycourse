@@ -1,0 +1,103 @@
+---
+alwaysApply: true
+description: Checklist file management and update rules
+---
+
+# Checklist File Management Rules
+
+This project uses a structured checklist system for managing complex module implementations.
+
+## File Locations
+
+### Implementation Planning
+- **File**: `./control_scripts/implement_prepare/checklist_Purpose.md`
+- **Purpose**: Contains implementation plans for complex modules
+- **Update Rule**: **ALWAYS replace entire content** when creating new module plans
+
+### Implementation Progress
+- **File**: `./control_scripts/implement_prepare/checklist_Guide.md`
+- **Purpose**: Tracks implementation progress in real-time
+- **Update Rule**: **ALWAYS replace entire content** when starting new implementations
+
+## Critical Update Rules
+
+### ❌ NEVER Do These:
+- Append content to existing checklist files
+- Modify existing content without replacing
+- Keep old content when starting new modules
+- Mix different module plans in the same file
+
+### ✅ ALWAYS Do These:
+- Replace entire file content for new modules
+- Use clear, structured markdown format
+- Include checkboxes for progress tracking
+- Document step-by-step implementation plans
+- Track progress systematically
+
+## File Content Requirements
+
+### checklist_Purpose.md Must Include:
+```markdown
+# [Module Name] Implementation Plan
+
+## Purpose
+[Detailed description of module functionality]
+
+## Implementation Steps
+1. [Step 1]: [Detailed explanation]
+2. [Step 2]: [Detailed explanation]
+3. [Step 3]: [Detailed explanation]
+
+## Dependencies
+- [List any dependencies or prerequisites]
+
+## Expected Outcomes
+- [What should be achieved after implementation]
+```
+
+### checklist_Guide.md Must Include:
+```markdown
+# [Module Name] Implementation Progress
+
+## Implementation Steps
+- [ ] Step 1: [Description] - Status: Pending/Done
+- [ ] Step 2: [Description] - Status: Pending/Done
+- [ ] Step 3: [Description] - Status: Pending/Done
+
+## Notes
+[Implementation notes and observations]
+
+## Issues & Resolutions
+[Problems encountered and solutions]
+```
+
+## Implementation Workflow
+
+1. **Identify Complex Module**: Determine if module requires multiple steps
+2. **Create Plan**: Write detailed plan to `checklist_Purpose.md` (replace old content)
+3. **Wait for Approval**: Get user confirmation before proceeding
+4. **Start Implementation**: Create progress tracker in `checklist_Guide.md` (replace old content)
+5. **Execute Steps**: Mark each step as Done when completed
+6. **Document Progress**: Update notes and track issues
+
+## File Replacement Commands
+
+When updating checklist files, always use complete file replacement:
+
+```typescript
+// ✅ CORRECT: Replace entire file content
+write(file_path, newContent);
+
+// ❌ WRONG: Append or modify existing content
+append(file_path, additionalContent);
+```
+
+## Progress Tracking Standards
+
+- Use `- [ ]` for pending steps
+- Use `- [x]` for completed steps
+- Include status indicators: `Status: Pending/Done`
+- Document any deviations from original plan
+- Record issues and their resolutions
+
+This system ensures clean, organized tracking of complex module implementations while maintaining clear separation between planning and execution phases.

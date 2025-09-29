@@ -1,0 +1,136 @@
+---
+alwaysApply: true
+description: Error handling and issue management workflow
+---
+
+# Error Handling and Issue Management Workflow
+
+This project uses a systematic approach to handle errors and manage issues to prevent repeating the same mistakes.
+
+## Error Handling Process
+
+### Phase 1: Pre-Code Check
+Before starting any coding task:
+
+1. **Check Issue Templates**: Always review [./control_scripts/issue_handle/issue_Template.md](mdc:control_scripts/issue_handle/issue_Template.md) for common issues and solutions
+2. **Learn from Past Mistakes**: Use existing templates to avoid known problems
+3. **Apply Prevention Tips**: Follow prevention strategies from templates
+
+### Phase 2: Issue Detection and Logging
+When an error occurs or is discovered:
+
+1. **Log the Issue**: Document the problem in [./control_scripts/issue_handle/issue_List.md](mdc:control_scripts/issue_handle/issue_List.md)
+2. **Replace Old Content**: Always replace entire content with new issue details
+3. **Include Complete Context**: Provide detailed description, error messages, and context
+
+### Phase 3: Issue Resolution
+After fixing the error:
+
+1. **Document Resolution**: Record the solution in [./control_scripts/issue_handle/issue_Lesson.md](mdc:control_scripts/issue_handle/issue_Lesson.md)
+2. **Replace Old Content**: Always replace entire content with new resolution details
+3. **Include Key Learnings**: Document what was learned and how to prevent recurrence
+
+### Phase 4: Template Creation
+After successful resolution:
+
+1. **Ask User Permission**: Ask if user wants to create a template for this issue
+2. **Create Template**: If approved, add template to [./control_scripts/issue_handle/issue_Template.md](mdc:control_scripts/issue_handle/issue_Template.md)
+3. **Append New Template**: Add new template without removing existing ones
+4. **Keep Templates Concise**: Create short, actionable templates
+
+## File Management Rules
+
+### issue_Template.md
+- **Purpose**: Quick reference for common issues and solutions
+- **Update Rule**: **APPEND new templates** (never replace old content)
+- **Content**: Issue description, causes, quick fixes, prevention tips
+- **Format**: Concise, actionable templates
+
+### issue_List.md
+- **Purpose**: Track current issue being resolved
+- **Update Rule**: **REPLACE entire content** for each new issue
+- **Content**: Current issue details, context, priority, status
+- **Format**: Structured markdown with clear issue details
+
+### issue_Lesson.md
+- **Purpose**: Document issue resolution process and lessons learned
+- **Update Rule**: **REPLACE entire content** for each new resolution
+- **Content**: Resolution steps, key learnings, prevention tips
+- **Format**: Structured markdown with clear resolution details
+
+## Template Format
+
+When creating new templates, use this format:
+
+```markdown
+### [Issue Type] Template
+
+**Issue**: [Brief description]
+**Common Causes**: 
+- [Cause 1]
+- [Cause 2]
+
+**Quick Fix**:
+1. [Step 1]
+2. [Step 2]
+
+**Prevention**:
+- [Prevention tip 1]
+- [Prevention tip 2]
+
+---
+```
+
+## Issue Logging Format
+
+When logging issues, use this format:
+
+```markdown
+# Current Issue
+
+**Issue ID**: [Unique identifier]
+**Timestamp**: [Date and time]
+**Description**: [Detailed description of the problem]
+**Error Messages**: [Any error messages or logs]
+**Context**: [What was being done when issue occurred]
+**Priority**: [High/Medium/Low]
+**Status**: [Open/In Progress/Resolved]
+```
+
+## Resolution Documentation Format
+
+When documenting resolutions, use this format:
+
+```markdown
+# Issue Resolution
+
+**Issue Summary**: [Brief description of the problem]
+**Root Cause**: [What actually caused the issue]
+**Resolution Steps**: 
+1. [Step 1]
+2. [Step 2]
+
+**Key Learnings**: [Important takeaways]
+**Prevention Tips**: [How to avoid this issue in the future]
+**Related Files**: [Files that were modified]
+**Time to Resolve**: [How long it took to fix]
+```
+
+## Critical Requirements
+
+1. **ALWAYS check templates** before starting any coding task
+2. **ALWAYS log issues** when they occur or are discovered
+3. **ALWAYS document resolutions** after fixing issues
+4. **ALWAYS ask permission** before creating new templates
+5. **ALWAYS follow file update rules** (replace vs append)
+6. **ALWAYS keep templates concise** and actionable
+
+## Error Prevention Strategy
+
+- Review existing templates before coding
+- Learn from past mistakes documented in templates
+- Apply prevention tips from templates
+- Create new templates for new types of issues
+- Continuously improve the template collection
+
+This system ensures systematic error handling, prevents repeating mistakes, and builds a knowledge base of solutions for future reference.

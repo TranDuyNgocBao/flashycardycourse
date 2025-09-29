@@ -1,0 +1,161 @@
+---
+alwaysApply: true
+description: File handling and management rules
+---
+
+# File Handling and Management Rules
+
+This project enforces strict file handling practices to ensure proper documentation, user control, and systematic file management.
+
+## File Creation and Documentation
+
+### README Documentation Requirement
+- **ALL files** created (.md or .ps1) **MUST** be documented in the README
+- **Documentation must include**:
+  - File purpose and functionality
+  - Usage instructions
+  - File location and path
+  - Dependencies or prerequisites
+  - Examples of usage
+
+### README Update Process
+1. **Create/Modify file** using staging diff
+2. **Update README** to document the new/modified file
+3. **Log file operation** in [./control_scripts/FileManagements.txt](mdc:control_scripts/FileManagements.txt)
+4. **Use staging diff** for README updates
+
+## File Operation Rules
+
+### ✅ MANDATORY: Staging Diff Only
+- **ALWAYS use staging diff** for all file operations
+- **NEVER use other mechanisms** to write files
+- **NEVER use bulk file operations** - always update files sequentially
+- **ALWAYS apply changes automatically** (no manual "Apply" required)
+
+### ✅ File Deletion Rules
+- **NEVER delete files** without user confirmation
+- **ALWAYS use staging diff** for file deletion
+- **ALWAYS ask for confirmation** before deleting any file
+- **ALWAYS log deletion requests** in FileManagements.txt
+
+### ✅ Sequential File Updates
+- **NEVER update multiple files simultaneously**
+- **ALWAYS update files one by one** using staging diff
+- **ALWAYS complete one file** before starting the next
+- **ALWAYS log each operation** individually
+
+## File Management Logging
+
+### FileManagements.txt Requirements
+- **Log ALL file operations** in [./control_scripts/FileManagements.txt](mdc:control_scripts/FileManagements.txt)
+- **Include complete details**:
+  - Timestamp of operation
+  - Operation type (Create/Modify/Delete)
+  - Full file path
+  - Reason for operation
+  - Status (Completed/Pending/Cancelled)
+
+### Log Entry Format
+```
+[YYYY-MM-DD HH:MM:SS] [CREATE] [file_path] - [Reason] - [Status: Completed]
+[YYYY-MM-DD HH:MM:SS] [MODIFY] [file_path] - [Reason] - [Status: Completed]
+[YYYY-MM-DD HH:MM:SS] [DELETE] [file_path] - [Reason] - [Status: Pending User Confirmation]
+```
+
+## File Operation Workflow
+
+### 1. Pre-Operation Check
+- [ ] Check if file already exists
+- [ ] Determine operation type (Create/Modify/Delete)
+- [ ] Prepare reason for operation
+- [ ] Check if README update is needed
+
+### 2. File Operation
+- [ ] Use staging diff for file operation
+- [ ] Apply changes automatically
+- [ ] Log operation in FileManagements.txt
+- [ ] Update README if needed
+
+### 3. Post-Operation
+- [ ] Verify file operation completed
+- [ ] Update file management log
+- [ ] Document in README if new file
+- [ ] Confirm with user if deletion
+
+## Critical Requirements
+
+### ❌ NEVER Do These:
+- Use non-staging diff mechanisms for file operations
+- Delete files without user confirmation
+- Update multiple files simultaneously
+- Skip README documentation for new files
+- Skip logging in FileManagements.txt
+- Use bulk file operations
+
+### ✅ ALWAYS Do These:
+- Use staging diff for all file operations
+- Ask for confirmation before deleting files
+- Update files sequentially one by one
+- Document new files in README
+- Log all operations in FileManagements.txt
+- Apply changes automatically
+
+## File Types and Documentation
+
+### Markdown Files (.md)
+- **Purpose**: Documentation, guides, templates
+- **README Documentation**: Required
+- **Usage**: Document in README with purpose and usage instructions
+
+### PowerShell Scripts (.ps1)
+- **Purpose**: Automation scripts, utilities
+- **README Documentation**: Required
+- **Usage**: Document in README with script purpose, parameters, and examples
+
+### Configuration Files
+- **Purpose**: Project configuration, settings
+- **README Documentation**: Required
+- **Usage**: Document in README with configuration options and examples
+
+## README Documentation Standards
+
+### Required Sections for New Files
+```markdown
+## [File Category]
+
+### [File Name]
+- **Path**: [relative/path/to/file]
+- **Purpose**: [What the file does]
+- **Usage**: [How to use the file]
+- **Dependencies**: [Any dependencies or prerequisites]
+- **Examples**: [Usage examples if applicable]
+```
+
+### File Categories
+- **Documentation**: README files, guides, templates
+- **Scripts**: PowerShell scripts, automation tools
+- **Configuration**: Config files, settings
+- **Templates**: Issue templates, implementation guides
+- **Logs**: File management logs, issue tracking
+
+## Error Handling for File Operations
+
+### File Creation Errors
+1. **Log error** in FileManagements.txt
+2. **Document error** in issue tracking system
+3. **Retry operation** using staging diff
+4. **Update README** if file creation succeeds
+
+### File Modification Errors
+1. **Log error** in FileManagements.txt
+2. **Check file permissions** and status
+3. **Retry with staging diff**
+4. **Update file management log**
+
+### File Deletion Errors
+1. **Log error** in FileManagements.txt
+2. **Ask user for guidance**
+3. **Check file dependencies**
+4. **Retry with user confirmation**
+
+This system ensures proper file management, user control, and comprehensive documentation of all file operations.

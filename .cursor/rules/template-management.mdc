@@ -1,0 +1,155 @@
+---
+alwaysApply: true
+description: Template management and content update rules
+---
+
+# Template Management Rules
+
+This project uses a template system to prevent repeating common errors and issues.
+
+## Template File Structure
+
+### Issue Templates
+- **File**: [./control_scripts/issue_handle/issue_Template.md](mdc:control_scripts/issue_handle/issue_Template.md)
+- **Purpose**: Quick reference for common issues and solutions
+- **Update Rule**: **APPEND new templates** (never replace old content)
+- **Content**: Issue descriptions, causes, quick fixes, prevention tips
+
+### Issue Tracking
+- **File**: [./control_scripts/issue_handle/issue_List.md](mdc:control_scripts/issue_handle/issue_List.md)
+- **Purpose**: Track current issue being resolved
+- **Update Rule**: **REPLACE entire content** for each new issue
+- **Content**: Current issue details, context, priority, status
+
+### Resolution Documentation
+- **File**: [./control_scripts/issue_handle/issue_Lesson.md](mdc:control_scripts/issue_handle/issue_Lesson.md)
+- **Purpose**: Document issue resolution process and lessons learned
+- **Update Rule**: **REPLACE entire content** for each new resolution
+- **Content**: Resolution steps, key learnings, prevention tips
+
+## Template Creation Process
+
+### 1. Pre-Code Check
+Before starting any coding task:
+- [ ] Check [./control_scripts/issue_handle/issue_Template.md](mdc:control_scripts/issue_handle/issue_Template.md) for relevant templates
+- [ ] Review common causes and prevention tips
+- [ ] Apply learned lessons from past issues
+
+### 2. Issue Logging
+When an error occurs:
+- [ ] Log issue details in [./control_scripts/issue_handle/issue_List.md](mdc:control_scripts/issue_handle/issue_List.md)
+- [ ] Replace entire content with new issue details
+- [ ] Include complete context and error messages
+
+### 3. Resolution Documentation
+After fixing the error:
+- [ ] Document resolution in [./control_scripts/issue_handle/issue_Lesson.md](mdc:control_scripts/issue_handle/issue_Lesson.md)
+- [ ] Replace entire content with new resolution details
+- [ ] Include key learnings and prevention tips
+
+### 4. Template Creation
+After successful resolution:
+- [ ] Ask user if they want to create a template
+- [ ] If approved, append new template to [./control_scripts/issue_handle/issue_Template.md](mdc:control_scripts/issue_handle/issue_Template.md)
+- [ ] Keep template concise and actionable
+- [ ] Never remove existing templates
+
+## Template Content Standards
+
+### Template Format
+```markdown
+### [Issue Type] Template
+
+**Issue**: [Brief description]
+**Common Causes**: 
+- [Cause 1]
+- [Cause 2]
+
+**Quick Fix**:
+1. [Step 1]
+2. [Step 2]
+
+**Prevention**:
+- [Prevention tip 1]
+- [Prevention tip 2]
+
+---
+```
+
+### Template Quality Requirements
+- **Concise**: Keep templates short and to the point
+- **Actionable**: Provide clear, step-by-step solutions
+- **Preventive**: Include tips to avoid the issue
+- **Specific**: Focus on common, recurring issues
+- **Clear**: Use simple language and clear formatting
+
+## File Update Rules
+
+### ✅ CORRECT: Template Updates
+```typescript
+// Append new template to issue_Template.md
+const newTemplate = `### New Issue Template\n...\n---\n`;
+const currentContent = readFile('issue_Template.md');
+const updatedContent = currentContent + '\n' + newTemplate;
+write('issue_Template.md', updatedContent);
+```
+
+### ✅ CORRECT: Issue Logging
+```typescript
+// Replace entire content for issue_List.md
+const newIssueContent = `# Current Issue\n...\n`;
+write('issue_List.md', newIssueContent);
+```
+
+### ✅ CORRECT: Resolution Documentation
+```typescript
+// Replace entire content for issue_Lesson.md
+const newResolutionContent = `# Issue Resolution\n...\n`;
+write('issue_Lesson.md', newResolutionContent);
+```
+
+### ❌ WRONG: Template Management
+```typescript
+// ❌ NEVER replace template content
+write('issue_Template.md', newTemplate); // WRONG!
+
+// ❌ NEVER append to issue tracking files
+append('issue_List.md', newContent); // WRONG!
+```
+
+## Template Categories
+
+Common template categories to consider:
+- **Build Errors**: Compilation, dependency issues
+- **Runtime Errors**: Application crashes, exceptions
+- **Database Errors**: Connection, query, migration issues
+- **Authentication Errors**: Login, permission, security issues
+- **UI/UX Errors**: Component rendering, styling issues
+- **API Errors**: Request/response, endpoint issues
+- **Configuration Errors**: Environment, setup issues
+
+## Template Maintenance
+
+### Regular Review
+- Review templates periodically for accuracy
+- Update templates when better solutions are found
+- Remove outdated or incorrect templates
+- Consolidate similar templates
+
+### Template Effectiveness
+- Track which templates are used most frequently
+- Identify gaps in template coverage
+- Improve template quality based on usage
+- Add new templates for emerging issues
+
+## Critical Requirements
+
+1. **ALWAYS check templates** before coding
+2. **ALWAYS log issues** when they occur
+3. **ALWAYS document resolutions** after fixing
+4. **ALWAYS ask permission** before creating templates
+5. **NEVER replace template content** (always append)
+6. **NEVER append to tracking files** (always replace)
+7. **ALWAYS keep templates concise** and actionable
+
+This system ensures systematic error prevention, efficient issue resolution, and continuous learning from past mistakes.

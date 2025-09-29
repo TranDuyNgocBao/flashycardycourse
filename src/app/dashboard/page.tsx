@@ -48,35 +48,29 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {decksWithCardCount.map((deck) => (
               <Card key={deck.id} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl">
-                    {deck.title}
-                  </CardTitle>
-                  {deck.description && (
-                    <CardDescription>
-                      {deck.description}
-                    </CardDescription>
-                  )}
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>{deck.cardCount} cards</span>
-                    <span>
-                      Created {new Date(deck.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </CardContent>
-                <CardFooter className="flex gap-2">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/decks/${deck.id}`}>Study</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/decks/${deck.id}/edit`}>Edit</Link>
-                  </Button>
-                </CardFooter>
+                <Link href={`/decks/${deck.id}`} className="block">
+                  <CardHeader>
+                    <CardTitle className="text-xl">
+                      {deck.title}
+                    </CardTitle>
+                    {deck.description && (
+                      <CardDescription>
+                        {deck.description}
+                      </CardDescription>
+                    )}
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>{deck.cardCount} cards</span>
+                      <span>
+                        Last updated: {new Date(deck.updatedAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Link>
               </Card>
             ))}
           </div>

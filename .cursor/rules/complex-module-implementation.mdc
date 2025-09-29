@@ -1,0 +1,129 @@
+---
+alwaysApply: true
+description: Complex module implementation preparation and execution workflow
+---
+
+# Complex Module Implementation Workflow
+
+This project requires a structured approach for implementing complex modules that involve multiple implementation steps.
+
+## Implementation Preparation Process
+
+### Phase 1: Analysis and Planning
+When encountering a complex module that requires multiple implementation steps:
+
+1. **DO NOT immediately start coding**
+2. **Analyze the complexity** and determine if it requires multiple steps
+3. **Create implementation steps** with detailed explanations
+4. **Document the plan** in `./control_scripts/implement_prepare/checklist_Purpose.md`
+5. **Wait for user approval** before proceeding with implementation
+
+### Phase 2: Documentation Requirements
+
+#### Checklist Purpose File
+- **Location**: `./control_scripts/implement_prepare/checklist_Purpose.md`
+- **Purpose**: Contains the implementation plan and steps
+- **Update Rule**: **ALWAYS replace old content** with new content for each new complex module
+- **Content Must Include**:
+  - Module name and purpose
+  - Step-by-step implementation plan
+  - Detailed explanation of each step
+  - Dependencies and prerequisites
+  - Expected outcomes
+
+#### Checklist Guide File
+- **Location**: `./control_scripts/implement_prepare/checklist_Guide.md`
+- **Purpose**: Tracks implementation progress
+- **Update Rule**: **ALWAYS replace old content** with new content for each implementation
+- **Content Must Include**:
+  - Implementation steps with checkboxes
+  - Progress tracking (Done/Pending)
+  - Notes and observations during implementation
+  - Issues encountered and resolutions
+
+### Phase 3: Implementation Execution
+
+After user approval:
+
+1. **Create/Update checklist_Guide.md** with implementation steps
+2. **Execute each step** systematically
+3. **Mark each step as Done** after completion
+4. **Update progress** in real-time
+5. **Document any issues** or modifications made
+
+## File Structure Requirements
+
+```
+control_scripts/
+└── implement_prepare/
+    ├── checklist_Purpose.md    # Implementation plan (replaced each time)
+    └── checklist_Guide.md      # Implementation progress (replaced each time)
+```
+
+## Implementation Rules
+
+### Before Starting Complex Modules:
+- [ ] Analyze complexity level
+- [ ] Create detailed implementation plan
+- [ ] Write plan to `checklist_Purpose.md` (replace old content)
+- [ ] Wait for user approval
+
+### During Implementation:
+- [ ] Create progress tracker in `checklist_Guide.md` (replace old content)
+- [ ] Execute steps systematically
+- [ ] Mark each step as Done when completed
+- [ ] Update progress in real-time
+- [ ] Document any deviations or issues
+
+### File Update Rules:
+- **checklist_Purpose.md**: Always replace entire content for new modules
+- **checklist_Guide.md**: Always replace entire content for new implementations
+- **Never append** to existing content - always replace
+- **Always use checkboxes** for progress tracking
+
+## Example Checklist Format
+
+### checklist_Purpose.md Template:
+```markdown
+# [Module Name] Implementation Plan
+
+## Purpose
+[Detailed description of what this module does]
+
+## Implementation Steps
+1. [Step 1]: [Detailed explanation]
+2. [Step 2]: [Detailed explanation]
+3. [Step 3]: [Detailed explanation]
+
+## Dependencies
+- [List any dependencies]
+
+## Expected Outcomes
+- [What should be achieved]
+```
+
+### checklist_Guide.md Template:
+```markdown
+# [Module Name] Implementation Progress
+
+## Implementation Steps
+- [ ] Step 1: [Description] - [Status: Pending/Done]
+- [ ] Step 2: [Description] - [Status: Pending/Done]
+- [ ] Step 3: [Description] - [Status: Pending/Done]
+
+## Notes
+[Implementation notes and observations]
+
+## Issues & Resolutions
+[Any problems encountered and how they were resolved]
+```
+
+## Critical Requirements
+
+1. **NEVER start coding** complex modules without creating the plan first
+2. **ALWAYS replace** old content in both checklist files
+3. **ALWAYS wait** for user approval before implementation
+4. **ALWAYS track progress** systematically
+5. **ALWAYS document** the process thoroughly
+
+This workflow ensures systematic, well-documented implementation of complex modules while maintaining clear progress tracking and user control over the development process.

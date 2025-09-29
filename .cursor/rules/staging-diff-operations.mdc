@@ -1,0 +1,222 @@
+---
+alwaysApply: true
+description: Staging diff operations and file control rules
+---
+
+# Staging Diff Operations Rules
+
+This project mandates the use of staging diff for all file operations to ensure user control and proper file management.
+
+## Staging Diff Requirements
+
+### ✅ MANDATORY: Staging Diff Only
+- **ALL file operations** must use staging diff mechanism
+- **NO alternative file writing methods** are allowed
+- **NO direct file manipulation** without staging diff
+- **NO bulk file operations** - always sequential
+
+### ✅ Automatic Application
+- **Changes are applied automatically** when using staging diff
+- **NO manual "Apply" clicks** required from user
+- **NO user intervention** needed for file operations
+- **Immediate application** of changes
+
+## File Operation Types
+
+### File Creation
+```typescript
+// ✅ CORRECT: Use staging diff for file creation
+write(file_path, content);
+
+// ❌ WRONG: Never use other methods
+fs.writeFileSync(file_path, content); // WRONG!
+```
+
+### File Modification
+```typescript
+// ✅ CORRECT: Use staging diff for file modification
+search_replace(file_path, old_content, new_content);
+
+// ❌ WRONG: Never use other methods
+fs.appendFileSync(file_path, content); // WRONG!
+```
+
+### File Deletion
+```typescript
+// ✅ CORRECT: Use staging diff for file deletion
+delete_file(file_path);
+
+// ❌ WRONG: Never use other methods
+fs.unlinkSync(file_path); // WRONG!
+```
+
+## Sequential File Operations
+
+### ✅ CORRECT: Sequential Processing
+1. **Process File 1** using staging diff
+2. **Wait for completion** and log operation
+3. **Process File 2** using staging diff
+4. **Wait for completion** and log operation
+5. **Continue sequentially** for all files
+
+### ❌ WRONG: Bulk Operations
+```typescript
+// ❌ NEVER do this - Bulk file operations
+const files = [file1, file2, file3];
+files.forEach(file => write(file, content)); // WRONG!
+
+// ❌ NEVER do this - Parallel operations
+Promise.all([
+  write(file1, content1),
+  write(file2, content2),
+  write(file3, content3)
+]); // WRONG!
+```
+
+## File Deletion Control
+
+### User Confirmation Required
+- **ALWAYS ask for confirmation** before deleting files
+- **ALWAYS use staging diff** for deletion requests
+- **ALWAYS log deletion requests** in FileManagements.txt
+- **NEVER delete files** without explicit user approval
+
+### Deletion Process
+1. **Identify file** to be deleted
+2. **Ask user for confirmation** with clear explanation
+3. **Log deletion request** in FileManagements.txt
+4. **Use staging diff** for deletion if approved
+5. **Update file management log** with result
+
+### Deletion Logging Format
+```
+[YYYY-MM-DD HH:MM:SS] [DELETE_REQUEST] [file_path] - [Reason] - [Status: Pending User Confirmation]
+[YYYY-MM-DD HH:MM:SS] [DELETE_APPROVED] [file_path] - [Reason] - [Status: User Approved]
+[YYYY-MM-DD HH:MM:SS] [DELETE_COMPLETED] [file_path] - [Reason] - [Status: Completed]
+```
+
+## File Management Logging
+
+### Required Logging
+- **ALL file operations** must be logged in [./control_scripts/FileManagements.txt](mdc:control_scripts/FileManagements.txt)
+- **Include complete details** for each operation
+- **Log before and after** each operation
+- **Track operation status** throughout the process
+
+### Log Entry Requirements
+```markdown
+[YYYY-MM-DD HH:MM:SS] [CREATE] [file_path] - [Reason] - [Status: Completed]
+[YYYY-MM-DD HH:MM:SS] [MODIFY] [file_path] - [Reason] - [Status: Completed]
+[YYYY-MM-DD HH:MM:SS] [DELETE_REQUEST] [file_path] - [Reason] - [Status: Pending User Confirmation]
+[YYYY-MM-DD HH:MM:SS] [DELETE_APPROVED] [file_path] - [Reason] - [Status: User Approved]
+[YYYY-MM-DD HH:MM:SS] [DELETE_COMPLETED] [file_path] - [Reason] - [Status: Completed]
+```
+
+## File Operation Workflow
+
+### 1. Pre-Operation
+- [ ] Check if file exists
+- [ ] Determine operation type
+- [ ] Prepare operation reason
+- [ ] Log operation start
+
+### 2. Operation Execution
+- [ ] Use staging diff for operation
+- [ ] Apply changes automatically
+- [ ] Wait for completion
+- [ ] Verify operation success
+
+### 3. Post-Operation
+- [ ] Log operation completion
+- [ ] Update file management log
+- [ ] Update README if needed
+- [ ] Confirm with user if deletion
+
+## Error Handling
+
+### Staging Diff Errors
+1. **Log error** in FileManagements.txt
+2. **Retry operation** with staging diff
+3. **Check file permissions** and status
+4. **Update error log** with resolution
+
+### File Permission Errors
+1. **Log permission error** in FileManagements.txt
+2. **Ask user for guidance**
+3. **Check file status** and dependencies
+4. **Retry with proper permissions**
+
+### Operation Timeout
+1. **Log timeout** in FileManagements.txt
+2. **Check file status** and dependencies
+3. **Retry operation** with staging diff
+4. **Update log** with resolution
+
+## Critical Requirements
+
+### ❌ NEVER Do These:
+- Use non-staging diff file operations
+- Delete files without user confirmation
+- Perform bulk file operations
+- Skip file management logging
+- Use alternative file writing methods
+- Skip user confirmation for deletions
+
+### ✅ ALWAYS Do These:
+- Use staging diff for all file operations
+- Ask for confirmation before deleting files
+- Process files sequentially one by one
+- Log all operations in FileManagements.txt
+- Apply changes automatically
+- Update README for new files
+
+## File Operation Examples
+
+### Creating a New File
+```typescript
+// 1. Log operation start
+logFileOperation('CREATE', file_path, 'Creating new file', 'Started');
+
+// 2. Use staging diff
+write(file_path, content);
+
+// 3. Log completion
+logFileOperation('CREATE', file_path, 'Creating new file', 'Completed');
+
+// 4. Update README
+updateReadmeWithNewFile(file_path, description);
+```
+
+### Modifying an Existing File
+```typescript
+// 1. Log operation start
+logFileOperation('MODIFY', file_path, 'Updating file content', 'Started');
+
+// 2. Use staging diff
+search_replace(file_path, old_content, new_content);
+
+// 3. Log completion
+logFileOperation('MODIFY', file_path, 'Updating file content', 'Completed');
+```
+
+### Deleting a File
+```typescript
+// 1. Ask for confirmation
+const confirmed = await askUserConfirmation(`Delete file: ${file_path}?`);
+
+if (confirmed) {
+  // 2. Log approval
+  logFileOperation('DELETE_APPROVED', file_path, 'User approved deletion', 'Approved');
+  
+  // 3. Use staging diff
+  delete_file(file_path);
+  
+  // 4. Log completion
+  logFileOperation('DELETE_COMPLETED', file_path, 'File deleted', 'Completed');
+} else {
+  // 5. Log cancellation
+  logFileOperation('DELETE_CANCELLED', file_path, 'User cancelled deletion', 'Cancelled');
+}
+```
+
+This system ensures proper file control, user oversight, and systematic file management through staging diff operations.
